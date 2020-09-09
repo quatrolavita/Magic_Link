@@ -3,6 +3,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature
 from . import db
 
+
 class User(db.Model):
     """Describe columns is db"""
 
@@ -26,23 +27,24 @@ class User(db.Model):
 
         return s.dumps({'id': self.id})
 
-    def decode_token(self, token):
-        """Decoding token"""
+    @staticmethod
+    def decode_token(token):
+        """Decoding token, and returning user obj"""
 
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
         except BadSignature:
-            return False
-        if data.get('id') != self.id:
-            return False
-        self.increment_counter(self.id)
+            return None
+        user_id = data.get('id')
+        user = User.query.get(user_id)
+        if user is None:
+            return None
 
-    @staticmethod
-    def increment_counter(user_id):
+        return user
+
+    def increment_counter(self):
         """ Incrementing user visiting counter"""
 
-        user = User.query.get(user_id)
-        user.counter += 1
+        self.counter += 1
         db.session.commit()
-        #Повесить ексепшен

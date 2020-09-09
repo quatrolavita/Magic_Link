@@ -1,8 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_mail import Mail
 from config import config
 
+mail = Mail()
 db = SQLAlchemy()
 
 
@@ -10,11 +12,12 @@ def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
+    mail.init_app(app)
     db.init_app(app)
     Migrate(app, db)
 
-    from .api import api
+    from .core import core
 
-    app.register_blueprint(api, url_prefix='/api')
+    app.register_blueprint(core)
 
     return app

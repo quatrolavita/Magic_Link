@@ -1,0 +1,7 @@
+Dear User,
+
+Welcome to Magic Link!
+
+You can access to the app by magic link
+
+{{ url_for('core.magic_link', token=token, _external=True) }}

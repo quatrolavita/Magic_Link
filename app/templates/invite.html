@@ -1,0 +1,7 @@
+<p>Dear User,</p>
+<p>Welcome to <b>Test task</b>!</p>
+<p>You can access to the app by magic link <a href="{{ url_for('core.magic_link', token=token, _external=True) }}">click here</a>.</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ url_for('core.magic_link', token=token, _external=True) }}</p>
+
+<p><small>Note: replies to this email address are not monitored.</small></p>
